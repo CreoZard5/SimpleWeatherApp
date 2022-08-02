@@ -1,10 +1,18 @@
 package com.creolin.weather_application_using_api;
 
+import static android.content.ContentValues.TAG;
+import static java.lang.System.in;
+
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 public class NetworkUtil
 {
@@ -31,6 +39,39 @@ public class NetworkUtil
         }
 
         return url;
+    }
+
+    public static String GetResponsetohttpUrl(URL url) throws IOException {
+
+        HttpURLConnection httpURLConnection = (HttpURLConnection) (url.openConnection());
+
+
+        try
+        {
+            //input from Http Get response
+            InputStream in = httpURLConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("//A");
+            Boolean hasinput = scanner.hasNext();
+
+            if (hasinput)
+            {
+              return scanner.next();
+            }
+            else
+            {
+                //Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "GetResponsetohttpUrl: " + scanner.next());
+                return null;
+            }
+
+        }
+        finally
+        {
+         httpURLConnection.disconnect();
+        }
+
     }
 
 
